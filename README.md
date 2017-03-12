@@ -34,7 +34,7 @@ Note that:
 * Service instance properties are unknown in advance, when the application is developed. These are known only at time of deployment. Also they may vary across different deployment environments. So it is not safe to hard-code their values in the application.
 * `name` is the only unique service instance property, which is determined when the service instance is created
 
-There are situations when an applications uses different instances of the same service for different purposes. Then it is particularly hard to select the right instance. For example an application might use two instances of a database service. it can use one for persistance of regular objects and the other for sensitive data like user credentials.
+There are situations when an applications uses different instances of the same service for different purposes. Then it is particularly hard to select the right instance. For example an application might use two instances of a database service - one for persistance of regular objects and the other for sensitive data like user credentials.
 
 An application should not require the operator to use specific instance names as one service instance can be bound to multiple applications.
 
@@ -63,6 +63,46 @@ or in manifest.yml
 services:
   regular-store: elephantsql-c6c60
   secure-store: elephantsql-d7d89
+```
+To preserve compatibility, service binding name can be added as a new property in *VCAP_SERVICES*.
+```
+VCAP_SERVICES=
+{
+  "elephantsql": [
+    {
+      "name": "elephantsql-c6c60",
+      "label": "elephantsql",
+      "bind_name": "regular-store",
+      ...
+    },
+    {
+      "name": "elephantsql-d7d89",
+      "label": "elephantsql",
+      "bind_name": "secure-store",
+      ...
+    },
+    ...
+  ],
+  ...
+```
+
+Ideally service binding names should be used as keys in *VCAP_SERVICES* so applications can easily find them.
+But this would break compatibility with existing applications.
+```
+VCAP_SERVICES=
+{
+  "regular-store": {
+    "name": "elephantsql-c6c60",
+    "label": "elephantsql",
+    ...
+  },
+  "secure-store": {
+    "name": "elephantsql-d7d89",
+    "label": "elephantsql",
+    ...
+  },
+  ...
+}
 ```
 
 
