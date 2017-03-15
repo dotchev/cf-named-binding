@@ -105,6 +105,22 @@ VCAP_SERVICES=
 }
 ```
 
+## Alternative Solutions
+
+### Service Instance Tags
+
+As Greg Cobb suggested in the cf-dev mailing list, one could use tags at service instance level
+```sh
+cf create-service elephantsql turtle elephantsql-c6c60 -t "db, regular-store"
+cf create-service elephantsql turtle elephantsql-d7d89 -t "db, secure-store"
+```
+The tags can be updated veen after the service instance is created
+```sh
+cf update-service elephantsql-c6c60 -t "regular-store"
+cf update-service elephantsql-d7d89 -t "secure-store"
+```
+Then an app could lookup a service by a specific tag. Tag could be hard-coded in the app. Since a service instance can be annotated with multiple tags, it can be bound to multiple apps.
+
 
 [1]: http://docs.cloudfoundry.org/devguide/services/application-binding.html
 [VCAP_SERVICES]: http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES
