@@ -121,6 +121,14 @@ cf update-service elephantsql-d7d89 -t "secure-store"
 ```
 Then an app could lookup a service by a specific tag. Tag could be hard-coded in the app. Since a service instance can be annotated with multiple tags, it can be bound to multiple apps.
 
+#### Issues
+
+There are several issues with this approach:
+* [User-provided services][2] have no tags
+* Ambiguous. Tags are not unique so it is possible that the same tag appears in multiple service instances bound to the same app
+* It is possible that different apps put different meaning in the same tag. This can lead to problems if a service instance with this tag is bound to these apps.
+
 
 [1]: http://docs.cloudfoundry.org/devguide/services/application-binding.html
+[2]: https://docs.cloudfoundry.org/devguide/services/user-provided.html
 [VCAP_SERVICES]: http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES
